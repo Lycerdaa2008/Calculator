@@ -1,40 +1,43 @@
-<!DOCTYPE html>
-<html>
-<head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Calculadora Simple</title>
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-</head>
-<body class="bg-light d-flex justify-centent-center align-items-center" style="margin: 0;">
-<div class="calculator p-4 bg-white rounded shadow-sm">
-      <input type="text" id="display" class="form-control mb-3 text-right" disabled>
-      <div class="row">
-            <button class="col btn btn-light" onclick="appendNumber(7)">7</button>
-            <button class="col btn btn-light" onclick="appendNumber(8)">8</button>
-            <button class="col btn btn-light" onclick="appendNumber(9)">9</button>
-            <button class="col btn btn-warning" onclick="setOperation('+')">+</button>
-      </div>
-            <div class="row">
-            <button class="col btn btn-light" onclick="appendNumber(4)">4</button>
-            <button class="col btn btn-light" onclick="appendNumber(5)">5</button>
-            <button class="col btn btn-light" onclick="appendNumber(6)">6</button>
-            <button class="col btn btn-warning" onclick="appendNumber('-')">-</button>
-      </div>
-            <div class="row">
-            <button class="col btn btn-light" onclick="appendNumber(1)">1</button>
-            <button class="col btn btn-light" onclick="appendNumber(2)">2</button>
-            <button class="col btn btn-light" onclick="appendNumber(3)">3</button>
-            <button class="col btn btn-warning" onclick="setOperation('*')">*</button>
-      </div>
-            <div class="row">
-            <button class="col btn btn-light" onclick="appendNumber(0)">0</button>
-            <button class="col btn btn-light" onclick="clearDisplay()">C</button>
-            <button class="col btn btn-sucess" onclick="calculate()">=</button>
-            <button class="col btn btn-warning" onclick="setOperation('/')">/</button>
-      </div>
-</div>
+let currentInput = '';
+let operation = null;
+let previousInput = '';
 
-<script src="inicio.js"></script>
-</body>
-</html>
+function appendNumber(number) {
+    currentInput += number;
+    document.getElementById('display').value = currentInput;
+}
+
+function setOperation(op) {
+    if (currentInput === '') return;
+    if (previousInput !== '') calculate();
+    operation = op;
+    previousInput = currentInput;
+    currentInput = '';
+}
+
+function calculate() {
+    let result;
+    const prev = parseFloat(previousInput);
+    const current = parseFloat(currentInput);
+
+    if (isNaN(prev) || isNaN(current)) return;
+
+    switch (operation) {
+        case '+': result = prev + current; break;
+        case '-': result = prev - current; break;
+        case '*': result = prev * current; break;
+        case '/': result = prev / current; break;
+        default: return;
+    }
+    currentInput = result.toString();
+    operation = null;
+    previousInput = '';
+    document.getElementById('display').value = currentInput;
+}
+
+function clearDisplay() {
+    currentInput = '';
+    operation = null;
+    previousInput = '';
+    document.getElementById('display').value = '';
+}
